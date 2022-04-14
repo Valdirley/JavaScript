@@ -7,11 +7,11 @@ test("Verificar Instanciação", () => {
 let f
 
 beforeEach(()=>{
-    f = new Fila_Circ (9);
+    f = new Fila_Circ (10);
 })
 
 test("Instanciação", () => {
-  expect(f.length(0)).toBe(0)
+  expect(f.length()).toBe(0)
 })
 
 test ("Adicionando um elemento", () => {
@@ -32,13 +32,14 @@ test("Teste OverFlow", () => {
   f.enqueue("y")
   expect(() => {
     f.enqueue(" ")
-  }).toThrowError("OverFlow")
+    f.enqueue("B")
+  }).toThrowError("OverFlow");
 })
 
 test("Teste de UnderFlow", () => {
   expect(() => {
     f.dequeue()
-  }).toThrowError("UnderFlow")
+  }).toThrowError("UnderFlow");
 })
 
 test("Teste de Comportamento", () => {
@@ -64,7 +65,8 @@ test("Teste de apagar fila", () => {
   f.enqueue("l")
   f.enqueue("e")
   f.enqueue("y")
-  f.clear(() => {
+  f.clear();
+  expect(() => {
     f.dequeue();
   }).toThrowError("UnderFlow")
 })
@@ -79,9 +81,9 @@ test("Teste de tamanho após apagar fila", () => {
   f.enqueue("l")
   f.enqueue("e")
   f.enqueue("y")
-f.clear()
-expect(f.length()).toBe(0)
-})
+  f.clear()
+  expect(f.length()).toBe(0)
+});
 
 test("Fila Valdirley", () => {
 expect(f.length()).toBe(0)
@@ -97,8 +99,9 @@ expect(f.length()).toBe(0)
   f.enqueue("l")
   f.enqueue("e")
   f.enqueue("y")
+  f.enqueue(" ")  
   expect(() => {
-    f.enqueue(" ")  
+    f.enqueue("B")  
   }).toThrowError("OverFlow")
   expect(f.dequeue()).toBe("V")
   expect(f.dequeue()).toBe("a")
@@ -108,19 +111,67 @@ expect(f.length()).toBe(0)
   expect(f.dequeue()).toBe("r")
   expect(f.dequeue()).toBe("l")
   expect(f.front()).toBe("e")
-  expect(f.length()).toBe(2)
+  expect(f.length()).toBe(3)
   expect(() => {
+    f.dequeue()
+    f.dequeue()
     f.dequeue()
     f.dequeue()
   }).toThrowError("UnderFlow")
   expect(f.length()).toBe(0)
 })
+
 /*
-test("toString", () => {
+test("Teste de loop", () => {
+f.inicio = 0;
+f.fim = 8;
+  console.log("tamanho: "+f.length());
+  console.log("Inicio: "+f.inicio);
+  console.log("Fim: "+f.fim);
+  f.enqueue(1)
+  f.enqueue(2)
+  f.enqueue(3)
+  console.log("tamanho: "+f.length());
+  console.log("Inicio: "+f.inicio);
+  console.log("Fim: "+f.fim);
+ 
+
+})
+
+*/
+test("Teste de loop", () => {
+  f.inicio = 0;
+  f.fim = 7;
+  f.enqueue(1)
+  f.enqueue(2)
+  f.enqueue(3)
+  expect(() => {
+  f.enqueue(4) 
+  }).toThrowError("OverFlow");
+  console.log("tamanho: "+f.length());
+  console.log("Inicio: "+f.inicio);
+  console.log("Fim: "+f.fim);
+})
+
+test("toString Inicio < Fim", () => {
   f.enqueue("B")
   f.enqueue("r")
   f.enqueue("a")
   f.enqueue("z")
-  expect(f.toString()).toBe("[B, r, a, z")
+  expect(f.toString()).toBe("[Braz]")
 })
-*/
+
+test("toString Inicio > Fim", () => {
+  f.inicio = 5;
+  f.fim = 5;
+  f.enqueue("V") //5
+  f.enqueue("a") //6
+  f.enqueue("l") //7
+  f.enqueue("d") //8
+  f.enqueue("i") //9
+  f.enqueue("r") //0
+  f.enqueue("l") //1
+  f.enqueue("e") //2
+  f.enqueue("y") //3
+  expect(f.toString()).toBe("[Valdirley]")
+})
